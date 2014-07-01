@@ -21,6 +21,7 @@ module.exports = function(grunt) {
             screenshots: 'screenshots',
             results: 'results',
             viewportSize: [1280, 800],
+            mismatchTolerance: 0.05,
             logLevel: 'error'
         });
 

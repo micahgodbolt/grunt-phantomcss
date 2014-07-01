@@ -2,6 +2,32 @@
 
 > Automate CSS regression testing with PhantomCSS
 
+## Notice
+
+**This is a fork of the original (presumably discontinued) repository of [grunt-phantomcss](https://github.com/chrisgladd/grunt-phantomcss). Currently this version here is untagged and unreleased on npm. However, you can install and use this version:**
+
+Add this to your `package.json`:
+
+    "grunt-phantomcss": "git://github.com/anselmh/grunt-phantomcss.git",
+
+or, alternatively, type this into your command line interface:
+
+    npm i --save-dev git://github.com/anselmh/grunt-phantomcss.git
+
+## CHANGELOG
+
+* Added `mismatchTolerance` tolerance (`mismatchTolerance: 0.0.5` is default) (thx [fidgety](https://github.com/chrisgladd/grunt-phantomcss/pull/17))
+* Use PhantomCSS v0.7.1
+* Update dependencies
+* Remove grunt as peerDependency causing multiple issues with peerPackages
+* Fix post-script `bower install`
+
+## TO DO:
+
+* Add timeout as an optional argument (currently can fail on large testing areas with a timeout)
+
+----
+
 ## Getting Started
 This plugin requires Grunt `~0.4.1`
 
@@ -29,7 +55,9 @@ grunt.initConfig({
     your_target: {
       options: {
         screenshots: 'test/visual/screenshots/',
-        results: 'results/visual/'
+        results: 'results/visual/',
+        viewportSize: [1280, 800],
+        mismatchTolerance: 0.05
       },
       src: [
         'test/visual/**/*.js'
@@ -47,25 +75,25 @@ Type: `String|Array`
 The test files to run.
 
 #### options.screenshots
-Type: `String`  
+Type: `String`
 Default: `'./screenshots'`
 
 The screenshots directory where test fixtures (comparison screenshots) are stored. Baseline screenshots will be stored here on the first run if they're not present.
 
 #### options.results
-Type: `String`  
+Type: `String`
 Default: `'./results'`
 
 The directory to store source, diff, and failure screenshots after tests.
 
 #### options.viewportSize
-Type: `Array`  
+Type: `Array`
 Default: `[1280, 800]`
 
-The viewport size to test the site in `[width, height]` format. Useful when testing responsive layouts. 
+The viewport size to test the site in `[width, height]` format. Useful when testing responsive layouts.
 
 #### options.logLevel
-Type: `String`  
+Type: `String`
 Default: `error`
 
 The CasperJS log level. See [CasperJS: Logging](http://casperjs.readthedocs.org/en/latest/logging.html) for details.

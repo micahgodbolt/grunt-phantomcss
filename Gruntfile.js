@@ -1,13 +1,16 @@
 /*
  * grunt-phantomcss
- * https://github.com/chrisgladd/grunt-phantomcss
+ * https://github.com/anselmh/grunt-phantomcss
  *
  * Copyright (c) 2013 Chris Gladd
+ * Copyright (c) since 2014 Anselm Hannemann
+ *
  * Licensed under the MIT license.
  */
 
 'use strict';
-module.exports = function(grunt) {
+
+module.exports = function (grunt) {
     // Project configuration.
     grunt.initConfig({
         jshint: {
@@ -22,7 +25,7 @@ module.exports = function(grunt) {
             },
         },
 
-        // Before generating any new files, remove any 
+        // Before generating any new files, remove any
         // previously-created files.
         clean: {
             tests: ['tmp'],

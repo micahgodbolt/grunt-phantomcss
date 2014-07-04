@@ -1,10 +1,13 @@
-/**
+/*
  * grunt-phantomcss
- * https://github.com/chrisgladd/grunt-phantomcss
+ * https://github.com/anselmh/grunt-phantomcss
  *
  * Copyright (c) 2013 Chris Gladd
+ * Copyright (c) since 2014 Anselm Hannemann
+ *
  * Licensed under the MIT license.
  */
+
 'use strict';
 
 var path = require('path');
@@ -17,12 +20,13 @@ module.exports = function(grunt) {
     grunt.registerMultiTask('phantomcss', 'CSS Regression Testing', function() {
         var done = this.async();
 
+        // Variable object to set default values for options
         var options = this.options({
             screenshots: 'screenshots',
             results: 'results',
             viewportSize: [1280, 800],
             mismatchTolerance: 0.05,
-            logLevel: 'error'
+            logLevel: 'error' // notice | warn | error
         });
 
         // Timeout ID for message checking loop

@@ -37,7 +37,10 @@ module.exports = function (grunt) {
             visualTest: {
                 options: {
                     screenshots: 'fixtures/screenshots/',
-                    results: 'results/'
+                    results: 'results/',
+                    viewportSize: [1280, 800],
+                    mismatchTolerance: 0.05,
+                    logLevel: 'warning' // debug | info | warning | error
                 },
                 src: [
                     'fixtures/coffeemachine_test.js'
@@ -51,13 +54,13 @@ module.exports = function (grunt) {
         },
     });
 
-    // Actually load this plugin's task(s).
-    grunt.loadTasks('tasks');
+    // Timings for Grunt
+    require('time-grunt')(grunt);
 
-    // These plugins provide necessary tasks.
-    grunt.loadNpmTasks('grunt-contrib-jshint');
-    grunt.loadNpmTasks('grunt-contrib-clean');
-    grunt.loadNpmTasks('grunt-contrib-nodeunit');
+    // Load all tasks JIT
+    require('jit-grunt')(grunt, {
+        phantomcss: 'tasks/phantomcss.js'
+    });
 
     // Whenever the "test" task is run, first clean the "tmp" dir,
     // then run this plugin's task(s), then test the result.

@@ -28,6 +28,6 @@
     "tests"
   ],
   "dependencies": {
-    "phantomcss": "0.7.1"
+    "phantomcss": "0.7.2"
   }
 }

@@ -3,6 +3,7 @@
 ### HEAD
 
 ### v0.3.1
+* Keep log level at "notice"
 * Add time-grunt to measure build times
 * Add jit-grunt to load tasks only when needed (+ improve performance)
 * Change log level to notice in Gruntfile

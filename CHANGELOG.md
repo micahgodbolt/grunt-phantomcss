@@ -1,6 +1,7 @@
 # CHANGELOG
 
 ### HEAD
+* Add `waitTimeout` as option
 
 ### v0.3.1
 * Keep log level at "notice"

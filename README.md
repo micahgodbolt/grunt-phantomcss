@@ -16,7 +16,7 @@ or, alternatively, type this into your command line interface:
 
 ## CHANGELOG
 
-* Added `mismatchTolerance` tolerance (`mismatchTolerance: 0.0.5` is default) (thx [fidgety](https://github.com/chrisgladd/grunt-phantomcss/pull/17))
+* Added `mismatchTolerance` tolerance (`mismatchTolerance: 0.05` is default) (thx [fidgety](https://github.com/chrisgladd/grunt-phantomcss/pull/17))
 * Use PhantomCSS v0.7.1
 * Update dependencies
 * Remove grunt as peerDependency causing multiple issues with peerPackages
@@ -73,6 +73,12 @@ grunt.initConfig({
 Type: `String|Array`
 
 The test files to run.
+
+#### options.mismatchTolerance
+Type: `Number`
+Default: `0.05`
+
+Toleranz of errors that is allowed in a screenshot (for instance to match anti-aliasing bugs).
 
 #### options.screenshots
 Type: `String`

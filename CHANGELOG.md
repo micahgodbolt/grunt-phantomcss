@@ -1,6 +1,8 @@
 # CHANGELOG
 
 ### HEAD
+* Update dependencies
+* Add `mismatchTolerance`as option
 * Add `waitTimeout` as option
 
 ### v0.3.1

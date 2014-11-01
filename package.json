@@ -42,8 +42,7 @@
     "node": ">= 0.10.0"
   },
   "scripts": {
-    "test": "grunt test",
-    "postinstall": "../bower/bin/bower install"
+    "test": "grunt test"
   },
   "devDependencies": {
     "grunt": "^0.4.5",

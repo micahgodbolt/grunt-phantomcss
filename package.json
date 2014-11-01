@@ -43,7 +43,7 @@
   },
   "scripts": {
     "test": "grunt test",
-    "postinstall": "bower install"
+    "postinstall": "../bower/bin/bower install"
   },
   "devDependencies": {
     "grunt": "^0.4.5",

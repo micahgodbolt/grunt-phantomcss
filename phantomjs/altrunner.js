@@ -13,6 +13,7 @@
 // Get node fileSystem module and define the separator module
 var fs = require('fs');
 var s = fs.separator;
+var path =  require('path')
 
 // Parse arguments passed in from the grunt task
 var args = JSON.parse(phantom.args[0]);
@@ -60,12 +61,24 @@ phantomcss.init({
   },
   onComplete: function(allTests, noOfFails, noOfErrors) {
     sendMessage('onComplete', allTests, noOfFails, noOfErrors);
-  }
+  },
+  fileNameGetter: function(root,filename){
+
+        var name = phantomcss.pathToTest + 'baseline/' + filename;
+        if(fs.isFile(name+'.png')){
+            return name +'.diff.png';
+        } else {
+            return name+'.png';
+        }
+    },
 });
 
 casper.start();
 // Run the test scenarios
 args.test.forEach(function(testSuite) {
+  casper.then(function() {
+    phantomcss.pathToTest = path.dirname(testSuite) + '/';
+  });
   require(testSuite);
   casper.then(function() {
     phantomcss.compareSession();

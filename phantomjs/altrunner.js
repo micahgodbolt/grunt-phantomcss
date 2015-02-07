@@ -15,6 +15,7 @@ var fs = require('fs');
 var s = fs.separator;
 var path =  require('path');
 
+
 // Parse arguments passed in from the grunt task
 var args = JSON.parse(phantom.args[0]);
 
@@ -76,6 +77,8 @@ phantomcss.init({
 casper.start();
 // Run the test scenarios
 args.test.forEach(function(testSuite) {
+  phantom.casperTest = true;
+
   casper.then(function() {
     phantomcss.pathToTest = path.dirname(testSuite) + '/';
   });

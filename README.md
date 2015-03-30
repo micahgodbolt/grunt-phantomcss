@@ -2,8 +2,6 @@
 
 > Automate CSS regression testing with PhantomCSS
 
-## Alt Runner Settings
-To enable the alternate task runner set `alt-runner=true` in the PhantomCSS grunt task options
 
 Grunt automatically envokes `casper.start()` when it begins, so all test files need to start with `casper.thenOpen`
 

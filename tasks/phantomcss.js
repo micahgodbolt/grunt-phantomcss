@@ -13,7 +13,7 @@
 var path = require('path');
 var tmp = require('temporary');
 var phantomBinaryPath = require('phantomjs').path;
-
+var runnerPath = path.join(__dirname, '..', 'phantomjs', 'runner.js');
 var phantomCSSPath = path.join(__dirname, '..', 'bower_components', 'phantomcss');
 
 module.exports = function(grunt) {
@@ -29,9 +29,6 @@ module.exports = function(grunt) {
             waitTimeout: 5000, // Set timeout to wait before throwing an exception
             logLevel: 'warning' // debug | info | warning | error
         });
-
-        var runnerFile = options.altRunner ? 'altrunner.js' : 'runner.js';
-        var runnerPath = path.join(__dirname, '..', 'phantomjs', runnerFile);
 
         // Timeout ID for message checking loop
         var messageCheckTimeout;
@@ -142,12 +139,6 @@ module.exports = function(grunt) {
                         else {
                             grunt.log.error(noOfFails + ' tests failed, ' + noOfErrors + ' had errors.');
                         }
-                    }
-                }
-                else {
-                    if (!options.altRunner) {
-                       grunt.log.ok('Baseline screenshots generated in '+options.screenshots);
-                       grunt.log.warn('Check that the generated screenshots are visually correct and delete them if they aren\'t.');
                     }
                 }
             }

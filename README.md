@@ -2,29 +2,28 @@
 
 > Automate CSS regression testing with PhantomCSS
 
+
+Grunt automatically envokes `casper.start()` when it begins, so all test files need to start with `casper.thenOpen`
+
+
 ## Notice
 
 **This is a fork of the original (presumably discontinued) repository of [grunt-phantomcss](https://github.com/chrisgladd/grunt-phantomcss). Currently this version here is untagged and unreleased on npm. However, you can install and use this version:**
 
 Add this to your `package.json`:
 
-    "grunt-phantomcss": "git://github.com/anselmh/grunt-phantomcss.git",
+    "grunt-phantomcss": "git://github.com/micahgodbolt/grunt-phantomcss.git",
 
 or, alternatively, type this into your command line interface:
 
-    npm i --save-dev git://github.com/anselmh/grunt-phantomcss.git
+    npm i --save-dev git://github.com/micahgodbolt/grunt-phantomcss.git
 
 ## CHANGELOG
 
-* Added `mismatchTolerance` tolerance (`mismatchTolerance: 0.05` is default) (thx [fidgety](https://github.com/chrisgladd/grunt-phantomcss/pull/17))
-* Use PhantomCSS v0.7.1
-* Update dependencies
-* Remove grunt as peerDependency causing multiple issues with peerPackages
-* Fix post-script `bower install`
 
 ## TO DO:
 
-* Add timeout as an optional argument (currently can fail on large testing areas with a timeout)
+
 
 ----
 
@@ -225,8 +224,4 @@ See the [CasperJS documentation](http://casperjs.readthedocs.org/en/latest/modul
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
 
 ## Release History
-* 2014-02-23   v0.2.2   Added multiple file example to README.md
-* 2014-02-07   v0.2.1   Fixed ResembleJS path issue
-* 2014-01-07   v0.2.0   Merged updates from Larry Davis
-* 2013-10-24   v0.1.1   Added the ability to use an external server
-* 2013-10-24   v0.1.0   Initial Release
+

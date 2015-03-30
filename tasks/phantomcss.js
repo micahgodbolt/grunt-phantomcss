@@ -141,10 +141,6 @@ module.exports = function(grunt) {
                         }
                     }
                 }
-                else {
-                    grunt.log.ok('Baseline screenshots generated in '+options.screenshots);
-                    grunt.log.warn('Check that the generated screenshots are visually correct and delete them if they aren\'t.');
-                }
             }
         };
 
@@ -174,7 +170,7 @@ module.exports = function(grunt) {
             cmd: phantomBinaryPath,
             args: [
                 runnerPath,
-                JSON.stringify(options)
+                JSON.stringify(options),
             ],
             opts: {
                 cwd: cwd,

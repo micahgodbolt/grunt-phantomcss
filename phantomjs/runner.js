@@ -79,7 +79,7 @@ casper.start();
 // Run the test scenarios
 args.test.forEach(function(testSuite) {
   phantom.casperTest = true;
-
+  phantom.rootUrl = args.rootUrl;
   casper.then(function() {
     phantomcss.pathToTest = path.dirname(testSuite) + '/';
   });

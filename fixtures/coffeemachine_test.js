@@ -1,4 +1,4 @@
-casper.start('fixtures/coffeemachine.html').then(function () {
+casper.thenOpen('fixtures/coffeemachine.html').then(function () {
     phantomcss.screenshot('#coffee-machine-wrapper', 'open coffee machine button');
 }).then( function () {
     casper.click('#coffee-machine-button');

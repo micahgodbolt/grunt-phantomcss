@@ -1,12 +1,13 @@
 /*
- * grunt-phantomcss
- * https://github.com/anselmh/grunt-phantomcss
- *
- * Copyright (c) 2013 Chris Gladd
- * Copyright (c) since 2014 Anselm Hannemann
- *
- * Licensed under the MIT license.
- */
+* grunt-phantomcss
+* https://github.com/micahgodbolt/grunt-phantomcss
+*
+* Copyright (c) 2013 Chris Gladd
+* Copyright (c) since 2014 Anselm Hannemann
+* Copyright (c) since 2015 Micah Godbolt
+*
+* Licensed under the MIT license.
+*/
 
 'use strict';
 
@@ -36,7 +37,7 @@ module.exports = function (grunt) {
         phantomcss: {
             visualTest: {
                 options: {
-                    screenshots: 'fixtures/screenshots/',
+                    screenshots: 'screenshots/',
                     results: 'results/',
                     viewportSize: [1280, 800],
                     mismatchTolerance: 0.05,
@@ -44,7 +45,7 @@ module.exports = function (grunt) {
                     logLevel: 'warning' // debug | info | warning | error
                 },
                 src: [
-                    'fixtures/coffeemachine_test.js'
+                    'fixtures/**/*_test.js'
                 ]
             }
         },

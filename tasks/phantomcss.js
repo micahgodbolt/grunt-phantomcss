@@ -1,12 +1,13 @@
 /*
- * grunt-phantomcss
- * https://github.com/anselmh/grunt-phantomcss
- *
- * Copyright (c) 2013 Chris Gladd
- * Copyright (c) since 2014 Anselm Hannemann
- *
- * Licensed under the MIT license.
- */
+* grunt-phantomcss
+* https://github.com/micahgodbolt/grunt-phantomcss
+*
+* Copyright (c) 2013 Chris Gladd
+* Copyright (c) since 2014 Anselm Hannemann
+* Copyright (c) since 2015 Micah Godbolt
+*
+* Licensed under the MIT license.
+*/
 
 'use strict';
 
@@ -22,6 +23,7 @@ module.exports = function(grunt) {
 
         // Variable object to set default values for options
         var options = this.options({
+            rootUrl: false,
             screenshots: 'screenshots',
             results: 'results',
             viewportSize: [1280, 800],
@@ -46,16 +48,16 @@ module.exports = function(grunt) {
         // Create a temporary file for message passing between the task and PhantomJS
         var tempFile = new tmp.File();
 
-        var deleteDiffScreenshots = function() {
+        var deleteDiffScreenshots = function(folderPath) {
             // Find diff/fail files
             var diffScreenshots = grunt.file.expand([
-                path.join(options.screenshots, '*diff.png'),
-                path.join(options.screenshots, '*fail.png')
+                folderPath + '/' + options.screenshots + '*diff.png',
+                folderPath + '/' + options.screenshots + '*fail.png',
             ]);
 
             // Delete all of 'em
-            diffScreenshots.forEach(function(filepath) {
-                grunt.file.delete(filepath);
+            diffScreenshots.forEach(function(folderPath) {
+                grunt.file.delete(folderPath);
             });
         };
 
@@ -63,16 +65,19 @@ module.exports = function(grunt) {
             // Remove temporary file
             tempFile.unlink();
 
-            // Create the output directory
-            grunt.file.mkdir(options.results);
 
-            // Copy fixtures, diffs, and failure images to the results directory
-            var allScreenshots = grunt.file.expand(path.join(options.screenshots, '**.png'));
-            allScreenshots.forEach(function(filepath) {
-                grunt.file.copy(filepath, path.join(options.results, path.basename(filepath)));
+            options.testFolder.forEach(function(folderpath) {
+                // Create the output directory
+                grunt.file.mkdir(folderpath + '/' + options.results);
+
+                // Copy fixtures, diffs, and failure images to the results directory
+                var allScreenshots = grunt.file.expand(path.join(folderpath + '/' + options.screenshots, '**.png'));
+                allScreenshots.forEach(function(filepath) {
+                    grunt.file.copy(filepath, path.join(folderpath + '/' + options.results, path.basename(filepath)));
+                });
+
+                deleteDiffScreenshots(folderpath);
             });
-
-            deleteDiffScreenshots();
 
             done(error || failureCount === 0);
         };
@@ -146,11 +151,12 @@ module.exports = function(grunt) {
 
         // Resolve paths for tests
         options.test = [];
+        options.testFolder = [];
         this.filesSrc.forEach(function(filepath) {
             options.test.push(path.resolve(filepath));
+            options.testFolder.push(path.dirname(filepath));
         });
 
-        options.screenshots = path.resolve(options.screenshots);
 
         // Put failure screenshots in the same place as source screenshots, we'll move/delete them after the test run
         // Note: This duplicate assignment is provided for clarity; PhantomCSS will put failures in the screenshots folder by default
@@ -161,7 +167,12 @@ module.exports = function(grunt) {
         options.phantomCSSPath = phantomCSSPath;
 
         // Remove old diff screenshots
-        deleteDiffScreenshots();
+
+        options.testFolder.forEach(function(filepath) {
+            deleteDiffScreenshots(filepath);
+        });
+
+
 
         // Start watching for messages
         checkForMessages();

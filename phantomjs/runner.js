@@ -1,9 +1,10 @@
 /*
 * grunt-phantomcss
-* https://github.com/anselmh/grunt-phantomcss
+* https://github.com/micahgodbolt/grunt-phantomcss
 *
 * Copyright (c) 2013 Chris Gladd
 * Copyright (c) since 2014 Anselm Hannemann
+* Copyright (c) since 2015 Micah Godbolt
 *
 * Licensed under the MIT license.
 */
@@ -65,7 +66,7 @@ phantomcss.init({
   },
   fileNameGetter: function(root,filename){
 
-        var name = phantomcss.pathToTest + 'baseline/' + filename;
+        var name = phantomcss.pathToTest + args.screenshots + filename;
         if(fs.isFile(name+'.png')){
             return name +'.diff.png';
         } else {
@@ -78,7 +79,7 @@ casper.start();
 // Run the test scenarios
 args.test.forEach(function(testSuite) {
   phantom.casperTest = true;
-
+  phantom.rootUrl = args.rootUrl;
   casper.then(function() {
     phantomcss.pathToTest = path.dirname(testSuite) + '/';
   });

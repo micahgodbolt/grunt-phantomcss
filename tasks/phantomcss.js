@@ -15,12 +15,7 @@ var path = require('path');
 var tmp = require('temporary');
 var phantomBinaryPath = require('phantomjs').path;
 var runnerPath = path.join(__dirname, '..', 'phantomjs', 'runner.js');
-var phantomCSSPath = path.join(
-  __dirname,
-  '..',
-  'bower_components',
-  'phantomcss'
-);
+var phantomCSSPath = path.join(__dirname, '..', 'bower_components', 'phantomcss');
 
 module.exports = function(grunt) {
   grunt.registerMultiTask('phantomcss', 'CSS Regression Testing', function() {
@@ -29,7 +24,7 @@ module.exports = function(grunt) {
     // Variable object to set default values for options
     var options = this.options({
       rootUrl: false,
-      screenshots: 'screenshots',
+      baselines: 'baselines',
       results: 'results',
       viewportSize: [1280, 800],
       mismatchTolerance: 0.05,
@@ -56,8 +51,8 @@ module.exports = function(grunt) {
     var deleteDiffScreenshots = function(folderPath) {
       // Find diff/fail files
       var diffScreenshots = grunt.file.expand([
-        folderPath + '/' + options.screenshots + '*diff.png',
-        folderPath + '/' + options.screenshots + '*fail.png',
+        folderPath + '/' + options.baselines + '*diff.png',
+        folderPath + '/' + options.baselines + '*fail.png',
       ]);
 
       // Delete all of 'em
@@ -75,10 +70,7 @@ module.exports = function(grunt) {
         grunt.file.mkdir(folderpath + '/' + options.results);
 
         // Copy fixtures, diffs, and failure images to the results directory
-        var allScreenshots = grunt.file.expand(path.join(
-            folderpath + '/' + options.screenshots,
-            '**.png'
-        ));
+        var allScreenshots = grunt.file.expand(path.join(folderpath + '/' + options.baselines, '**.png'));
         allScreenshots.forEach(function(filepath) {
           grunt.file.copy(filepath, path.join(
               folderpath + '/' + options.results,
@@ -130,17 +122,13 @@ module.exports = function(grunt) {
 
     var messageHandlers = {
       onFail: function(test) {
-        grunt.log.writeln('Visual change found for ' +
-            path.basename(test.filename) + ' (' +
-            test.mismatch + '% mismatch)');
+        grunt.log.writeln('Visual change found for ' + path.basename(test.filename) + ' (' + test.mismatch + '% mismatch)');
       },
       onPass: function(test) {
-        grunt.log.writeln('No changes found for ' +
-            path.basename(test.filename));
+        grunt.log.writeln('No changes found for ' + path.basename(test.filename));
       },
       onTimeout: function(test) {
-        grunt.log.writeln('Timeout while processing ' +
-            path.basename(test.filename));
+        grunt.log.writeln('Timeout while processing ' + path.basename(test.filename));
       },
       onComplete: function(allTests, noOfFails, noOfErrors) {
         if (allTests.length) {
@@ -153,8 +141,7 @@ module.exports = function(grunt) {
             if (noOfErrors === 0) {
               grunt.log.error(noOfFails + ' tests failed.');
             } else {
-              grunt.log.error(noOfFails + ' tests failed, ' +
-                  noOfErrors + ' had errors.');
+              grunt.log.error(noOfFails + ' tests failed, ' + noOfErrors + ' had errors.');
             }
           }
         }
@@ -171,7 +158,7 @@ module.exports = function(grunt) {
 
     // Put failure screenshots in the same place as source screenshots, we'll move/delete them after the test run
     // Note: This duplicate assignment is provided for clarity; PhantomCSS will put failures in the screenshots folder by default
-    options.failures = options.screenshots;
+    options.failures = options.baselines;
 
     // Pass necessary paths
     options.tempFile = tempFile.path;

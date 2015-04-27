@@ -27,10 +27,7 @@ var viewportSize = {
 
 // Messages are sent to the parent by appending them to the tempfile
 var sendMessage = function() {
-  fs.write(args.tempFile, JSON.stringify(
-      Array.prototype.slice.call(arguments)) + '\n',
-      'a'
-  );
+  fs.write(args.tempFile, JSON.stringify(Array.prototype.slice.call(arguments)) + '\n', 'a');
 };
 
 // Initialise CasperJs
@@ -67,7 +64,7 @@ phantomcss.init({
     sendMessage('onComplete', allTests, noOfFails, noOfErrors);
   },
   fileNameGetter: function(root, filename) {
-    var name = phantomcss.pathToTest + args.screenshots + filename;
+    var name = phantomcss.pathToTest + args.screenshots + '/' + filename;
     if (fs.isFile(name + '.png')) {
       return name + '.diff.png';
     } else {

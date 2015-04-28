@@ -16,7 +16,6 @@ var fs = require('fs');
 var s = fs.separator;
 var path =  require('path');
 
-
 // Parse arguments passed in from the grunt task
 var args = JSON.parse(phantom.args[0]);
 
@@ -34,8 +33,8 @@ var sendMessage = function() {
 // Initialise CasperJs
 var phantomCSSPath = args.phantomCSSPath;
 
-phantom.casperPath = phantomCSSPath+s+'CasperJs';
-phantom.injectJs(phantom.casperPath+s+'bin'+s+'bootstrap.js');
+phantom.casperPath = phantomCSSPath + s + 'CasperJs';
+phantom.injectJs(phantom.casperPath + s + 'bin' + s + 'bootstrap.js');
 
 var casper = require('casper').create({
   viewportSize: viewportSize,
@@ -44,7 +43,7 @@ var casper = require('casper').create({
 });
 
 // Require and initialise PhantomCSS module
-var phantomcss = require(phantomCSSPath+s+'phantomcss.js');
+var phantomcss = require(phantomCSSPath + s + 'phantomcss.js');
 
 phantomcss.init({
   screenshotRoot: args.screenshots,
@@ -64,15 +63,14 @@ phantomcss.init({
   onComplete: function(allTests, noOfFails, noOfErrors) {
     sendMessage('onComplete', allTests, noOfFails, noOfErrors);
   },
-  fileNameGetter: function(root,filename){
-
-        var name = phantomcss.pathToTest + args.screenshots + filename;
-        if(fs.isFile(name+'.png')){
-            return name +'.diff.png';
-        } else {
-            return name+'.png';
-        }
-    },
+  fileNameGetter: function(root, filename) {
+    var name = phantomcss.pathToTest + args.screenshots + '/' + filename;
+    if (fs.isFile(name + '.png')) {
+      return name + '.diff.png';
+    } else {
+      return name + '.png';
+    }
+  },
 });
 
 casper.start();
@@ -91,7 +89,6 @@ args.test.forEach(function(testSuite) {
     casper.test.done();
   });
 });
-
 
 // End tests
 casper.run(function() {

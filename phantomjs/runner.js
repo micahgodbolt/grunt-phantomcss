@@ -64,7 +64,7 @@ phantomcss.init({
     sendMessage('onComplete', allTests, noOfFails, noOfErrors);
   },
   fileNameGetter: function(root, filename) {
-    var name = phantomcss.pathToTest + args.screenshots + '/' + filename;
+    var name = phantomcss.pathToTest + args.baselines + '/' + filename;
     if (fs.isFile(name + '.png')) {
       return name + '.diff.png';
     } else {

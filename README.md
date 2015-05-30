@@ -2,41 +2,28 @@
 
 > Automate CSS regression testing with PhantomCSS
 
+This is a fork of the original [grunt-phantomcss](https://github.com/huddle/grunt-phantomcss), with the following updates and enhancements:
+ * Anselmh's updates detailed [here](https://github.com/anselmh/grunt-phantomcss)
+ * More modular file structure, storing test baseline(s) and result(s) in the directory of the test file itself rather than within a single root directory. This keeps the baselines, results, and tests together with less coupling between tests.
+ * PhantomJS updated to v1.98 to fix [SSLv3 bug](https://github.com/ariya/phantomjs/issues/12655)
+ * New rootUrl option, to accomodate testing against multiple envirronments
 
-Grunt automatically envokes `casper.start()` when it begins, so all test files need to start with `casper.thenOpen`
-
-
-## Notice
-
-**This is a fork of the original (presumably discontinued) repository of [grunt-phantomcss](https://github.com/chrisgladd/grunt-phantomcss). Currently this version here is untagged and unreleased on npm. However, you can install and use this version:**
-
-Add this to your `package.json`:
-
-    "grunt-phantomcss": "git://github.com/micahgodbolt/grunt-phantomcss.git",
-
-or, alternatively, type this into your command line interface:
-
-    npm i --save-dev git://github.com/micahgodbolt/grunt-phantomcss.git
-
-## CHANGELOG
-
-
-## TO DO:
-
-
+Currently this fork is not available on npm, however, you can install and use this version by following the steps below.
 
 ----
 
 ## Getting Started
-This plugin requires Grunt `~0.4.1`
+This plugin requires Grunt `~0.4.5`
 
-If you haven't used [Grunt](http://gruntjs.com/) before, be sure to check out the [Getting Started](http://gruntjs.com/getting-started) guide, as it explains how to create a [Gruntfile](http://gruntjs.com/sample-gruntfile) as well as install and use Grunt plugins. Once you're familiar with that process, you may install this plugin with this command:
+If you haven't used [Grunt](http://gruntjs.com/) before, be sure to check out the [Getting Started](http://gruntjs.com/getting-started) guide, as it explains how to create a [Gruntfile](http://gruntjs.com/sample-gruntfile) as well as install and use Grunt plugins. Once you're familiar with that process, you may install this plugin through the following steps.
 
-```shell
-npm install grunt-phantomcss --save-dev
+First, add the following line to your `package.json`:
+
+```js
+"grunt-phantomcss": "git://github.com/micahgodbolt/grunt-phantomcss.git",
 ```
 
-Once the plugin has been installed, it may be enabled inside your Gruntfile with this line of JavaScript:
+Then, once the plugin has been installed via `npm install`, it may be enabled inside your Gruntfile with this line of JavaScript:
 
 ```js
 grunt.loadNpmTasks('grunt-phantomcss');
@@ -50,19 +37,17 @@ In your project's Gruntfile, add a section named `phantomcss` to the data object
 ```js
 grunt.initConfig({
   phantomcss: {
-    options: {},
-    your_target: {
-      options: {
+    options: {
         screenshots: 'test/visual/screenshots/',
         results: 'results/visual/',
         viewportSize: [1280, 800],
-        mismatchTolerance: 0.05
+        mismatchTolerance: 0.05,
+        rootUrl: 'http://localhost:3000/' // Optional
       },
       src: [
         'test/visual/**/*.js'
       ]
     }
-  }
 });
 ```
 
@@ -77,7 +62,7 @@ The test files to run.
 Type: `Number`
 Default: `0.05`
 
-Toleranz of errors that is allowed in a screenshot (for instance to match anti-aliasing bugs).
+The change percentange tolerated between screenshots (for instance to match anti-aliasing bugs).
 
 #### options.screenshots
 Type: `String`
@@ -103,6 +88,12 @@ Default: `error`
 
 The CasperJS log level. See [CasperJS: Logging](http://casperjs.readthedocs.org/en/latest/logging.html) for details.
 
+#### options.rootUrl
+Type: `String`
+Default: ``
+
+Optional parameter passed to testfiles for prepending to relative URL's. Useful when testing against multiple environments.
+
 
 ### Usage Examples
 
@@ -124,7 +115,7 @@ grunt.initConfig({
 ```
 
 #### Responsive layout testing
-Run tests in `test/visual/` against comparison screenshots for destop and mobile.
+Run tests in `test/visual/` against comparison screenshots for destop and mobile. Pass rootUrl option to specify testing against `http://localhost:3000/`.
 
 ```js
 grunt.initConfig({
@@ -133,7 +124,8 @@ grunt.initConfig({
       options: {
         screenshots: 'test/visual/desktop/',
         results: 'results/visual/desktop',
-        viewportSize: [1024, 768]
+        viewportSize: [1024, 768],
+        rootUrl: 'http://localhost:3000/'
       },
       src: [
         'test/visual/**.js'
@@ -143,7 +135,8 @@ grunt.initConfig({
       options: {
         screenshots: 'test/visual/mobile/',
         results: 'results/visual/mobile',
-        viewportSize: [320, 480]
+        viewportSize: [320, 480],
+        rootUrl: 'http://localhost:3000/mobile/'
       },
       src: [
         'test/visual/**.js'
@@ -156,72 +149,49 @@ grunt.initConfig({
 #### Sample test file
 
 Test files should do the following:
-* Start CasperJS with the URL you want to test
-* Manipulate the page in some way
+* Instruct CasperJS to open the URL you want to test. Grunt automatically envokes `casper.start()` when it begins, so all test files need to start with `casper.thenOpen`.
+* Manipulate the page in some way if necessary. *PhantomJS is known to have trouble rendering web fonts and, as such, replacing text with a standard web font may be warranted.*
 * Take screenshots
 
 ```javascript
-casper.start('http://localhost:3000/')
-.then(function() {
-  phantomcss.screenshot('#todo-app', 'Main app');
-})
-.then(function() {
-  casper.fill('form.todo-form', {
-    todo: 'Item1'
-  }, true);
-
-  phantomcss.screenshot('#todo-app', 'Item added');
-})
-.then(function() {
-  casper.click('.todo-done');
-
-  phantomcss.screenshot('#todo-app', 'Item checked off');
-});
+casper.thenOpen('http://localhost:3000/todo')
+    .then(function() {
+      jQuery('*').css('font-family', 'arial, sans-serif');
+    })
+    .then(function() {
+      phantomcss.screenshot('#todo-app', 'Main app');
+    })
+    .then(function() {
+      casper.fill('form.todo-form', {
+        todo: 'Item1'
+      }, true);
+    
+      phantomcss.screenshot('#todo-app', 'Item added');
+    })
+    .then(function() {
+      casper.click('.todo-done');
+    
+      phantomcss.screenshot('#todo-app', 'Item checked off');
+    });
 ```
 
-You can also load a local file by specifying a path (relative to the Gruntfile):
+You can also make URL's relative, prepending the rootUrl to them:
 
 ```javascript
-casper.start('build/client/index.html')
-.then(function() {
-  // ...
-});
+casper.thenOpen(phantom.rootUrl + 'todo')
+    .then(function() {
+      jQuery('*').css('font-family', 'arial, sans-serif');
+    })
+    .then(function() {
+      phantomcss.screenshot('#todo-app', 'Main app');
+    });
 ```
 
-### Multiple Test Files
-Your first test file should use ```casper.start```
 
-```javascript
-casper.start('http://localhost:3000/')
-.then(function() {
-  phantomcss.screenshot('#todo-app', 'Main app');
-})
-.then(function() {
-  casper.fill('form.todo-form', {
-    todo: 'Item1'
-  }, true);
-
-  phantomcss.screenshot('#todo-app', 'Item added');
-});
-
-```
-Subsequent files should call ```casper.then``` to continue the previous test.
-
-```javascript
-casper.then(function() {
-  casper.click('.todo-done');
-
-  phantomcss.screenshot('#todo-app', 'Item checked off');
-});
-```
-You can also use ```casper.thenOpen``` to load a new url and continue testing in subsequent files instead of ```casper.start```.
-
-
+### Additional Resources
 See the [CasperJS documentation](http://casperjs.readthedocs.org/en/latest/modules/casper.html) and the [PhantomCSS documentation](https://github.com/Huddle/PhantomCSS) for more information on using CasperJS and PhantomCSS.
 
-
-## Contributing
-In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
-
-## Release History
-
+For further examples, refer to the following blog posts:
+  * [CSS Testing with PhantomCSS, PhantomJS, CasperJS and Grunt](http://www.phase2technology.com/blog/css-testing-with-phantomcss-phantomjs-casperjs-and-grunt/)
+  * [Visual Regression Testing: How to Test Dynamic Content with PhantomCSS](http://www.phase2technology.com/blog/visual-regression-testing-how-to-test-dynamic-content-phantomcss/)
+  * [Visual Regression Testing Part 2: Extending Grunt-PhantomCSS for Multiple Environments](http://www.phase2technology.com/blog/visual-regression-testing-part-2-extending-grunt-phantomcss-for-multiple-environments/)

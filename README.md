@@ -68,13 +68,13 @@ The change percentange tolerated between screenshots (for instance to match anti
 Type: `String`
 Default: `'./screenshots'`
 
-The screenshots directory where test fixtures (comparison screenshots) are stored. Baseline screenshots will be stored here on the first run if they're not present.
+The screenshots directory, relative to the src file, where test fixtures (comparison screenshots) are stored. Baseline screenshots will be stored here on the first run if they're not present.
 
 #### options.results
 Type: `String`
 Default: `'./results'`
 
-The directory to store source, diff, and failure screenshots after tests.
+The directory, relative to the src file, to store source, diff, and failure screenshots after tests.
 
 #### options.viewportSize
 Type: `Array`
@@ -156,7 +156,9 @@ Test files should do the following:
 ```javascript
 casper.thenOpen('http://localhost:3000/todo')
     .then(function() {
-      jQuery('*').css('font-family', 'arial, sans-serif');
+      this.evaluate(function() {
+        $('*').css('font-family', 'arial, sans-serif');
+      });
     })
     .then(function() {
       phantomcss.screenshot('#todo-app', 'Main app');
@@ -191,7 +193,8 @@ casper.thenOpen(phantom.rootUrl + 'todo')
 ### Additional Resources
 See the [CasperJS documentation](http://casperjs.readthedocs.org/en/latest/modules/casper.html) and the [PhantomCSS documentation](https://github.com/Huddle/PhantomCSS) for more information on using CasperJS and PhantomCSS.
 
-For further examples, refer to the following blog posts:
+For further examples, refer to the following posts:
   * [CSS Testing with PhantomCSS, PhantomJS, CasperJS and Grunt](http://www.phase2technology.com/blog/css-testing-with-phantomcss-phantomjs-casperjs-and-grunt/)
+  * [Sass Bites #73 - Visual Regression Testing with PhantomCSS (Video)](https://youtu.be/cZtN6xvPcPk?t=14m1s)
   * [Visual Regression Testing: How to Test Dynamic Content with PhantomCSS](http://www.phase2technology.com/blog/visual-regression-testing-how-to-test-dynamic-content-phantomcss/)
   * [Visual Regression Testing Part 2: Extending Grunt-PhantomCSS for Multiple Environments](http://www.phase2technology.com/blog/visual-regression-testing-part-2-extending-grunt-phantomcss-for-multiple-environments/)

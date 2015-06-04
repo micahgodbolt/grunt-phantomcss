@@ -48,16 +48,28 @@ module.exports = function(grunt) {
     // Create a temporary file for message passing between the task and PhantomJS
     var tempFile = new tmp.File();
 
-    var deleteDiffScreenshots = function(folderPath) {
+    var deleteDiffScreenshots = function(folderpath) {
       // Find diff/fail files
       var diffScreenshots = grunt.file.expand([
-        folderPath + '/' + options.screenshots + '*diff.png',
-        folderPath + '/' + options.screenshots + '*fail.png',
+        path.join(folderpath + '/' + options.screenshots, '*diff.png'),
+        path.join(folderpath + '/' + options.screenshots, '*fail.png'),
       ]);
 
       // Delete all of 'em
-      diffScreenshots.forEach(function(folderPath) {
-        grunt.file.delete(folderPath);
+      diffScreenshots.forEach(function(filepath) {
+        grunt.file.delete(filepath);
+      });
+    };
+
+    var deleteDiffResults = function(folderpath) {
+      // Find diff/fail files
+      var diffScreenshots = grunt.file.expand([
+        path.join(folderpath, options.results),
+      ]);
+
+      // Delete all of 'em
+      diffScreenshots.forEach(function(filepath) {
+        grunt.file.delete(filepath);
       });
     };
 
@@ -71,6 +83,7 @@ module.exports = function(grunt) {
 
         // Copy fixtures, diffs, and failure images to the results directory
         var allScreenshots = grunt.file.expand(path.join(folderpath + '/' + options.screenshots, '**.png'));
+
         allScreenshots.forEach(function(filepath) {
           grunt.file.copy(filepath, path.join(
               folderpath + '/' + options.results,
@@ -166,8 +179,9 @@ module.exports = function(grunt) {
 
     // Remove old diff screenshots
 
-    options.testFolder.forEach(function(filepath) {
-      deleteDiffScreenshots(filepath);
+    options.testFolder.forEach(function(folderpath) {
+      deleteDiffScreenshots(folderpath);
+      deleteDiffResults(folderpath);
     });
 
     // Start watching for messages

@@ -37,11 +37,12 @@ module.exports = function (grunt) {
         phantomcss: {
             visualTest: {
                 options: {
-                    screenshots: 'screenshots/',
-                    results: 'results/',
+                    screenshots: 'screenshots',
+                    results: 'results',
                     viewportSize: [1280, 800],
                     mismatchTolerance: 0.05,
                     waitTimeout: 5000,
+                    rootUrl: 'fixtures',
                     logLevel: 'warning' // debug | info | warning | error
                 },
                 src: [

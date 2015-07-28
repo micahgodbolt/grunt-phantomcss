@@ -17,10 +17,16 @@ This plugin requires Grunt `~0.4.5`
 
 If you haven't used [Grunt](http://gruntjs.com/) before, be sure to check out the [Getting Started](http://gruntjs.com/getting-started) guide, as it explains how to create a [Gruntfile](http://gruntjs.com/sample-gruntfile) as well as install and use Grunt plugins. Once you're familiar with that process, you may install this plugin through the following steps.
 
-First, add the following line to your `package.json`:
+Install from the command line:
+
+```
+  $ npm install @micahgodbolt/grunt-phantomcss --save-dev
+```
+
+Or add the following line to your `package.json`:
 
 ```js
-"grunt-phantomcss": "git://github.com/micahgodbolt/grunt-phantomcss.git",
+  "@micahgodbolt/grunt-phantomcss": "^0.4.0"
 ```
 
 Then, once the plugin has been installed via `npm install`, it may be enabled inside your Gruntfile with this line of JavaScript:
@@ -167,12 +173,12 @@ casper.thenOpen('http://localhost:3000/todo')
       casper.fill('form.todo-form', {
         todo: 'Item1'
       }, true);
-    
+
       phantomcss.screenshot('#todo-app', 'Item added');
     })
     .then(function() {
       casper.click('.todo-done');
-    
+
       phantomcss.screenshot('#todo-app', 'Item checked off');
     });
 ```

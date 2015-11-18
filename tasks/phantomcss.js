@@ -57,7 +57,7 @@ module.exports = function(grunt) {
 
       // Delete all of 'em
       diffScreenshots.forEach(function(filepath) {
-        grunt.file.delete(filepath);
+        grunt.file.delete(filepath, { force: true });
       });
     };
 
@@ -69,7 +69,7 @@ module.exports = function(grunt) {
 
       // Delete all of 'em
       diffScreenshots.forEach(function(filepath) {
-        grunt.file.delete(filepath);
+        grunt.file.delete(filepath, { force: true });
       });
     };
 

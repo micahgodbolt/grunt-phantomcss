@@ -70,7 +70,7 @@ phantomcss.init({
     } else {
       return name + '.png';
     }
-  },
+  }
 });
 
 casper.start();

@@ -48,52 +48,22 @@ module.exports = function(grunt) {
     // Create a temporary file for message passing between the task and PhantomJS
     var tempFile = new tmp.File();
 
-    var deleteDiffScreenshots = function(folderpath) {
+    var deleteScreenshots = function(pattern) {
       // Find diff/fail files
-      var diffScreenshots = grunt.file.expand([
-        path.join(folderpath + '/' + options.screenshots, '*diff.png'),
-        path.join(folderpath + '/' + options.screenshots, '*fail.png'),
+      var screenshots = grunt.file.expand([
+        path.join(options.screenshots, pattern)
       ]);
 
       // Delete all of 'em
-      diffScreenshots.forEach(function(filepath) {
-        grunt.file.delete(filepath);
-      });
-    };
-
-    var deleteDiffResults = function(folderpath) {
-      // Find diff/fail files
-      var diffScreenshots = grunt.file.expand([
-        path.join(folderpath, options.results),
-      ]);
-
-      // Delete all of 'em
-      diffScreenshots.forEach(function(filepath) {
-        grunt.file.delete(filepath);
+      screenshots.forEach(function(filepath) {
+        grunt.file.delete(filepath, { force: true });
       });
     };
 
     var cleanup = function(error) {
       // Remove temporary file
       tempFile.unlink();
-
-      options.testFolder.forEach(function(folderpath) {
-        // Create the output directory
-        grunt.file.mkdir(folderpath + '/' + options.results);
-
-        // Copy fixtures, diffs, and failure images to the results directory
-        var allScreenshots = grunt.file.expand(path.join(folderpath + '/' + options.screenshots, '**.png'));
-
-        allScreenshots.forEach(function(filepath) {
-          grunt.file.copy(filepath, path.join(
-              folderpath + '/' + options.results,
-              path.basename(filepath)
-          ));
-        });
-
-        deleteDiffScreenshots(folderpath);
-      });
-
+      deleteScreenshots('*diff.png');
       done(error || failureCount === 0);
     };
 
@@ -180,8 +150,8 @@ module.exports = function(grunt) {
     // Remove old diff screenshots
 
     options.testFolder.forEach(function(folderpath) {
-      deleteDiffScreenshots(folderpath);
-      deleteDiffResults(folderpath);
+      deleteScreenshots('*diff.png');
+      deleteScreenshots('*fail.png');
     });
 
     // Start watching for messages
@@ -190,8 +160,8 @@ module.exports = function(grunt) {
     grunt.util.spawn({
       cmd: phantomBinaryPath,
       args: [
-        runnerPath,
-        JSON.stringify(options),
+      runnerPath,
+      JSON.stringify(options)
       ],
       opts: {
         cwd: cwd,

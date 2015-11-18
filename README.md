@@ -32,7 +32,7 @@ Or add the following line to your `package.json`:
 Then, once the plugin has been installed via `npm install`, it may be enabled inside your Gruntfile with this line of JavaScript:
 
 ```js
-grunt.loadNpmTasks('grunt-phantomcss');
+grunt.loadNpmTasks('@micahgodbolt/grunt-phantomcss');
 ```
 
 ## The "phantomcss" task

@@ -29,7 +29,8 @@ module.exports = function(grunt) {
       viewportSize: [1280, 800],
       mismatchTolerance: 0.05,
       waitTimeout: 5000, // Set timeout to wait before throwing an exception
-      logLevel: 'warning' // debug | info | warning | error
+      logLevel: 'warning', // debug | info | warning | error
+      phantomjsArgs: []
     });
 
     // Timeout ID for message checking loop
@@ -184,15 +185,17 @@ module.exports = function(grunt) {
       deleteDiffResults(folderpath);
     });
 
+    var runnerArgs = options.phantomjsArgs.concat([
+      runnerPath,
+      JSON.stringify(options),
+    ]);
+
     // Start watching for messages
     checkForMessages();
 
     grunt.util.spawn({
       cmd: phantomBinaryPath,
-      args: [
-        runnerPath,
-        JSON.stringify(options),
-      ],
+      args: runnerArgs,
       opts: {
         cwd: cwd,
         stdio: 'inherit'

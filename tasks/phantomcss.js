@@ -40,12 +40,14 @@ var phantomBinaryPath = require('phantomjs').path;
 var runnerPath = path.resolve(__dirname, '..', 'phantomjs', 'runner.js');
 var phantomCSSPath = findPath('phantomcss', [
   path.resolve(__dirname, '..', 'node_modules'),
-  path.resolve(__dirname, '..', '..', 'node_modules') // sibling node_module (per npm 3 installation)
+  path.resolve(__dirname, '..', '..', 'node_modules'), // sibling node_module (per npm 3 installation)
+  path.resolve(__dirname, '..', '..', '..', '..', 'node_modules') // sibling node_module with '@micahgodbolt' (per npm 3 installation)
 ]);
 var casperJSPath = findPath('casperjs', [
   path.resolve(phantomCSSPath, 'node_modules'),
   path.resolve(phantomCSSPath, '..', '..', 'node_modules'), // sibling node_module of phantomcss (per nmp 3)
-  path.resolve(__dirname, '..', '..', 'node_modules') // sibling root node_module (per npm 3)
+  path.resolve(__dirname, '..', '..', 'node_modules'), // sibling root node_module (per npm 3)
+  path.resolve(__dirname, '..', '..', '..', '..', 'node_modules') // sibling node_module with '@micahgodbolt' (per npm 3 installation)
 ]);
 
 

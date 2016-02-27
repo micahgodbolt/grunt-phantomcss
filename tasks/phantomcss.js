@@ -11,6 +11,9 @@
 
 'use strict';
 
+var path = require('path');
+var fs = require('fs');
+
 function findPath(folderName, paths) {
   var goodPath = null;
   for (var i = 0; i < paths.length && !goodPath; i++) {
@@ -32,8 +35,6 @@ function findPath(folderName, paths) {
   return goodPath;
 }
 
-var path = require('path');
-var fs = require('fs');
 var tmp = require('temporary');
 var phantomBinaryPath = require('phantomjs').path;
 var runnerPath = path.resolve(__dirname, '..', 'phantomjs', 'runner.js');

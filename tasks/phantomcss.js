@@ -125,7 +125,7 @@ module.exports = function(grunt) {
 
         deleteDiffScreenshots(folderpath);
       });
-      done(); //error || failureCount === 0);
+      done(error || failureCount === 0);
     };
 
     var checkForMessages = function checkForMessages(stopChecking) {
@@ -230,11 +230,6 @@ module.exports = function(grunt) {
         stdio: 'inherit'
       }
     }, function(error, result, code) {
-      // OK, I don't know why this is, but the spawn is returning an empty object for error, but there is no error.
-      // running the exact command on the command line produces no error.
-      // So kludging this to let the task finish without "aborted without warnings"
-      if (error && error === {}) error = null;
-
       // When Phantom exits check for remaining messages one last time
       checkForMessages(true);
 

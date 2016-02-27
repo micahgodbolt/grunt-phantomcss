@@ -23,8 +23,7 @@ function findPath(folderName, paths) {
         break;
       }
     } catch (e) {
-      console.log('Failed to get stats for ' + folderName + ': ' + e);
-      // if we get an exception, let's try the next path
+      // if we get an exception, just try the next path
     }
   }
   if (goodPath == null) {

@@ -18,7 +18,6 @@ function findPath(folderName, paths) {
   var goodPath = null;
   for (var i = 0; i < paths.length && !goodPath; i++) {
     var folderPath = path.resolve(paths[i], folderName);
-    console.log('testing ' + folderPath);
     try {
       var stats = fs.statSync(folderPath);
       if (stats.isDirectory()) {

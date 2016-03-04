@@ -1,21 +1,54 @@
 /*
-* grunt-phantomcss
-* https://github.com/micahgodbolt/grunt-phantomcss
-*
-* Copyright (c) 2013 Chris Gladd
-* Copyright (c) since 2014 Anselm Hannemann
-* Copyright (c) since 2015 Micah Godbolt
-*
-* Licensed under the MIT license.
-*/
+ * grunt-phantomcss
+ * https://github.com/micahgodbolt/grunt-phantomcss
+ *
+ * Copyright (c) 2013 Chris Gladd
+ * Copyright (c) since 2014 Anselm Hannemann
+ * Copyright (c) since 2015 Micah Godbolt
+ *
+ * Licensed under the MIT license.
+ */
 
 'use strict';
 
 var path = require('path');
+var fs = require('fs');
+
+function findPath(folderName, paths) {
+  var goodPath = null;
+  for (var i = 0; i < paths.length && !goodPath; i++) {
+    var folderPath = path.resolve(paths[i], folderName);
+    try {
+      var stats = fs.statSync(folderPath);
+      if (stats.isDirectory()) {
+        goodPath = folderPath;
+        break;
+      }
+    } catch (e) {
+      // if we get an exception, just try the next path
+    }
+  }
+  if (goodPath == null) {
+    throw new Error('Unable to locate the root folder for ' + folderName + ' module');
+  }
+  return goodPath;
+}
+
 var tmp = require('temporary');
 var phantomBinaryPath = require('phantomjs').path;
-var runnerPath = path.join(__dirname, '..', 'phantomjs', 'runner.js');
-var phantomCSSPath = path.join(__dirname, '..', 'node_modules', 'phantomcss');
+var runnerPath = path.resolve(__dirname, '..', 'phantomjs', 'runner.js');
+var phantomCSSPath = findPath('phantomcss', [
+  path.resolve(__dirname, '..', 'node_modules'),
+  path.resolve(__dirname, '..', '..', 'node_modules'), // sibling node_module (per npm 3 installation)
+  path.resolve(__dirname, '..', '..', '..', '..', 'node_modules') // sibling node_module with '@micahgodbolt' (per npm 3 installation)
+]);
+var casperJSPath = findPath('casperjs', [
+  path.resolve(phantomCSSPath, 'node_modules'),
+  path.resolve(phantomCSSPath, '..', '..', 'node_modules'), // sibling node_module of phantomcss (per nmp 3)
+  path.resolve(__dirname, '..', '..', 'node_modules'), // sibling root node_module (per npm 3)
+  path.resolve(__dirname, '..', '..', '..', '..', 'node_modules') // sibling node_module with '@micahgodbolt' (per npm 3 installation)
+]);
+
 
 module.exports = function(grunt) {
   grunt.registerMultiTask('phantomcss', 'CSS Regression Testing', function() {
@@ -57,7 +90,7 @@ module.exports = function(grunt) {
 
       // Delete all of 'em
       diffScreenshots.forEach(function(filepath) {
-        grunt.file.delete(filepath);
+        grunt.file.delete(filepath, { force: true });
       });
     };
 
@@ -69,7 +102,7 @@ module.exports = function(grunt) {
 
       // Delete all of 'em
       diffScreenshots.forEach(function(filepath) {
-        grunt.file.delete(filepath);
+        grunt.file.delete(filepath, { force: true });
       });
     };
 
@@ -86,14 +119,13 @@ module.exports = function(grunt) {
 
         allScreenshots.forEach(function(filepath) {
           grunt.file.copy(filepath, path.join(
-              folderpath + '/' + options.results,
-              path.basename(filepath)
+            folderpath + '/' + options.results,
+            path.basename(filepath)
           ));
         });
 
         deleteDiffScreenshots(folderpath);
       });
-
       done(error || failureCount === 0);
     };
 
@@ -176,6 +208,7 @@ module.exports = function(grunt) {
     // Pass necessary paths
     options.tempFile = tempFile.path;
     options.phantomCSSPath = phantomCSSPath;
+    options.casperJSPath = casperJSPath;
 
     // Remove old diff screenshots
 

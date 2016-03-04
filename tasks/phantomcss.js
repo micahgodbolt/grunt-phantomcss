@@ -35,7 +35,8 @@ function findPath(folderName, paths) {
 }
 
 var tmp = require('temporary');
-var phantomBinaryPath = require('phantomjs').path;
+var phantomBinaryPath = require('phantomjs-prebuilt').path;
+
 var runnerPath = path.resolve(__dirname, '..', 'phantomjs', 'runner.js');
 var phantomCSSPath = findPath('phantomcss', [
   path.resolve(__dirname, '..', 'node_modules'),
@@ -209,7 +210,6 @@ module.exports = function(grunt) {
     options.tempFile = tempFile.path;
     options.phantomCSSPath = phantomCSSPath;
     options.casperJSPath = casperJSPath;
-
     // Remove old diff screenshots
 
     options.testFolder.forEach(function(folderpath) {
@@ -219,7 +219,6 @@ module.exports = function(grunt) {
 
     // Start watching for messages
     checkForMessages();
-
     grunt.util.spawn({
       cmd: phantomBinaryPath,
       args: [

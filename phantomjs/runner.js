@@ -12,12 +12,13 @@
 'use-strict';
 
 // Get node fileSystem module and define the separator module
+var system = require('system');
 var fs = require('fs');
 var s = fs.separator;
 var path =  require('path');
 
 // Parse arguments passed in from the grunt task
-var args = JSON.parse(phantom.args[0]);
+var args = JSON.parse(system.args[1]);
 
 // Get viewport arguments (width | height)
 var viewportSize = {

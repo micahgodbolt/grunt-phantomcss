@@ -49,6 +49,9 @@ grunt.initConfig({
         viewportSize: [1280, 800],
         mismatchTolerance: 0.05,
         rootUrl: 'http://localhost:3000/' // Optional
+        phantomjsArgs: [
+          // optional, array of phantomJS CLI options
+        ]
       },
       src: [
         'test/visual/**/*.js'
@@ -99,6 +102,25 @@ Type: `String`
 Default: ``
 
 Optional parameter passed to testfiles for prepending to relative URL's. Useful when testing against multiple environments.
+
+#### options.phantomjsArgs
+Type: `Array`
+Default: `[]`
+
+Optional array of CLI arguments passed when running phantomJS. See [PhantomJS Command-line Options](http://phantomjs.org/api/command-line.html) for details.
+
+```js
+// Example PhantomJS Command-line Options
+phantomcss: {
+    options: {
+        [...]
+        phantomjsArgs: [
+            '--ssl-protocol=tlsv1',
+            '--ignore-ssl-errors=true',
+        ]
+    }
+}
+```
 
 
 ### Usage Examples

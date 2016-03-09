@@ -43,7 +43,10 @@ module.exports = function (grunt) {
                     mismatchTolerance: 0.05,
                     waitTimeout: 5000,
                     rootUrl: 'fixtures',
-                    logLevel: 'warning' // debug | info | warning | error
+                    logLevel: 'warning', // debug | info | warning | error
+                    phantomjsArgs: [
+                      '--ignore-ssl-errors=true',
+                    ]
                 },
                 src: [
                     'fixtures/**/*_test.js'

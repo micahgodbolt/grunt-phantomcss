@@ -109,6 +109,19 @@ Default: `[]`
 
 Optional array of CLI arguments passed when running phantomJS. See [PhantomJS Command-line Options](http://phantomjs.org/api/command-line.html) for details.
 
+```js
+// Example PhantomJS Command-line Options
+phantomcss: {
+    options: {
+        [...]
+        phantomjsArgs: [
+            '--ssl-protocol=tlsv1',
+            '--ignore-ssl-errors=true',
+        ]
+    }
+}
+```
+
 
 ### Usage Examples
 

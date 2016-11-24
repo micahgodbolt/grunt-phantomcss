@@ -35,7 +35,7 @@ function findPath(folderName, paths) {
 }
 
 var tmp = require('temporary');
-var phantomBinaryPath = require('phantomjs').path;
+var phantomBinaryPath = require('phantomjs-prebuilt').path;
 var runnerPath = path.resolve(__dirname, '..', 'phantomjs', 'runner.js');
 var phantomCSSPath = findPath('phantomcss', [
   path.resolve(__dirname, '..', 'node_modules'),
@@ -63,7 +63,9 @@ module.exports = function(grunt) {
       mismatchTolerance: 0.05,
       waitTimeout: 5000, // Set timeout to wait before throwing an exception
       logLevel: 'warning', // debug | info | warning | error
-      phantomjsArgs: []
+      phantomjsArgs: [],
+      flattenFailures: true, // by default phantomcss "flattens" all failures into one folder.  If set to 'false'
+                             // then this flattening step will be skipped.
     });
 
     // Timeout ID for message checking loop
@@ -204,7 +206,9 @@ module.exports = function(grunt) {
 
     // Put failure screenshots in the same place as source screenshots, we'll move/delete them after the test run
     // Note: This duplicate assignment is provided for clarity; PhantomCSS will put failures in the screenshots folder by default
-    options.failures = options.screenshots;
+    if (options.flattenFailures) {
+      options.failures = options.screenshots;
+    }
 
     // Pass necessary paths
     options.tempFile = tempFile.path;
@@ -238,6 +242,7 @@ module.exports = function(grunt) {
       checkForMessages(true);
 
       cleanup(error);
+      done();
     });
   });
 };

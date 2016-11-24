@@ -4,3 +4,5 @@
 /tmp
 **/results
 /scratchpad.js
+.idea
+.DS_Store

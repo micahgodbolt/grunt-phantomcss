@@ -26,7 +26,7 @@ Install from the command line:
 Or add the following line to your `package.json`:
 
 ```js
-  "@micahgodbolt/grunt-phantomcss": "^0.4.0"
+  "@micahgodbolt/grunt-phantomcss": "^1.0.0"
 ```
 
 Then, once the plugin has been installed via `npm install`, it may be enabled inside your Gruntfile with this line of JavaScript:

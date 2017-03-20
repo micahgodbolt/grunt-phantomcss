@@ -4,7 +4,7 @@
 *
 * Copyright (c) 2013 Chris Gladd
 * Copyright (c) since 2014 Anselm Hannemann
-* Copyright (c) since 2015 Micah Godbolt
+* Copyright (c) since 2017 Micah Godbolt
 *
 * Licensed under the MIT license.
 */
